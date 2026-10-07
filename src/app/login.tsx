@@ -1,0 +1,123 @@
+import { useRef } from 'react';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { Button } from '@/components/Button';
+import { colors, spacing } from '@/core/theme';
+import { DEMO_PASSWORD } from '@/data/remote/mockServer';
+import { useLoginViewModel } from '@/features/auth/useLoginViewModel';
+
+export default function LoginScreen() {
+  const vm = useLoginViewModel();
+  const passwordRef = useRef<TextInput>(null);
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+            accessibilityIgnoresInvertColors
+            accessible
+            accessibilityLabel="Intellipaat"
+          />
+          <Text style={styles.heading}>Welcome back</Text>
+          <Text style={styles.subheading}>Sign in to continue learning</Text>
+
+          <View style={styles.field}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={[styles.input, vm.fieldErrors.email && styles.inputError]}
+              value={vm.email}
+              onChangeText={vm.onEmailChange}
+              placeholder="you@example.com"
+              placeholderTextColor={colors.textMuted}
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect={false}
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              returnKeyType="next"
+              onSubmitEditing={() => passwordRef.current?.focus()}
+              editable={!vm.isSubmitting}
+              accessibilityLabel="Email"
+            />
+            {vm.fieldErrors.email && <Text style={styles.error}>{vm.fieldErrors.email}</Text>}
+          </View>
+
+          <View style={styles.field}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              ref={passwordRef}
+              style={[styles.input, vm.fieldErrors.password && styles.inputError]}
+              value={vm.password}
+              onChangeText={vm.onPasswordChange}
+              placeholder="••••••"
+              placeholderTextColor={colors.textMuted}
+              secureTextEntry
+              autoComplete="password"
+              textContentType="password"
+              returnKeyType="go"
+              onSubmitEditing={vm.submit}
+              editable={!vm.isSubmitting}
+              accessibilityLabel="Password"
+            />
+            {vm.fieldErrors.password && (
+              <Text style={styles.error}>{vm.fieldErrors.password}</Text>
+            )}
+          </View>
+
+          {vm.submitError && (
+            <Text style={[styles.error, styles.submitError]} accessibilityRole="alert">
+              {vm.submitError}
+            </Text>
+          )}
+
+          <Button title="Log in" onPress={vm.submit} loading={vm.isSubmitting} />
+
+          {__DEV__ && (
+            <Text style={styles.hint}>Demo: any valid email, password “{DEMO_PASSWORD}”</Text>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: colors.background },
+  flex: { flex: 1 },
+  container: { flexGrow: 1, justifyContent: 'center', padding: spacing.xl, gap: spacing.lg },
+  logo: { width: 140, height: 140, alignSelf: 'center' },
+  heading: { fontSize: 28, fontWeight: '700', color: colors.text },
+  subheading: { fontSize: 16, color: colors.textMuted, marginBottom: spacing.sm },
+  field: { gap: spacing.xs },
+  label: { fontSize: 14, fontWeight: '500', color: colors.text },
+  input: {
+    minHeight: 48,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    paddingHorizontal: spacing.md,
+    fontSize: 16,
+    color: colors.text,
+    backgroundColor: colors.surface,
+  },
+  inputError: { borderColor: colors.danger },
+  error: { color: colors.danger, fontSize: 13 },
+  submitError: { textAlign: 'center' },
+  hint: { fontSize: 12, color: colors.textMuted, textAlign: 'center' },
+});

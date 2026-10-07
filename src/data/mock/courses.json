@@ -1,0 +1,39 @@
+[
+  {
+    "id": 1,
+    "title": "Python Programming",
+    "instructor": "John Smith",
+    "lessons": [
+      "Introduction", "Installing Python", "Variables & Data Types", "Operators", "Strings",
+      "Lists & Tuples", "Dictionaries & Sets", "Control Flow", "Loops", "Functions",
+      "Modules & Packages", "File Handling", "Exceptions", "OOP", "Inheritance",
+      "Iterators & Generators", "Decorators", "Virtual Environments", "Testing with pytest", "Final Project"
+    ],
+    "completedCount": 13
+  },
+  {
+    "id": 2,
+    "title": "Generative AI",
+    "instructor": "Sarah Williams",
+    "lessons": [
+      "What is Generative AI", "History of Language Models", "Tokens & Embeddings", "Transformers",
+      "Attention", "Prompt Engineering", "Few-shot Prompting", "Retrieval-Augmented Generation",
+      "Vector Databases", "Fine-tuning", "Evaluation", "Tool Use & Agents", "Safety & Alignment",
+      "Image Generation", "Deploying LLM Apps", "Capstone"
+    ],
+    "completedCount": 6
+  },
+  {
+    "id": 3,
+    "title": "Full Stack Development",
+    "instructor": "David Brown",
+    "lessons": [
+      "Introduction", "How the Web Works", "HTML Basics", "Semantic HTML", "CSS Basics", "Flexbox",
+      "CSS Grid", "JavaScript Basics", "DOM Manipulation", "Async JavaScript", "Fetch & REST",
+      "TypeScript", "React Basics", "React State", "React Effects", "Routing", "Node.js",
+      "Express", "REST API Design", "Databases & SQL", "ORMs", "Authentication", "Testing",
+      "Docker", "CI/CD", "Deployment", "Performance", "Final Project"
+    ],
+    "completedCount": 7
+  }
+]
