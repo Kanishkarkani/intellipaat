@@ -1,6 +1,7 @@
 import { router, Stack } from 'expo-router';
 import { useCallback } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Banner } from '@/components/Banner';
 import { OfflineBanner } from '@/components/OfflineBanner';
@@ -15,6 +16,7 @@ import { useCoursesViewModel } from '@/features/courses/useCoursesViewModel';
 export default function DashboardScreen() {
   const { state, isRefreshing, refresh, retry } = useCoursesViewModel();
   const { signOut } = useSession();
+  const insets = useSafeAreaInsets();
 
   const openCourse = useCallback((course: Course) => {
     router.push({ pathname: '/course/[id]', params: { id: String(course.id) } });
@@ -58,7 +60,7 @@ export default function DashboardScreen() {
             data={state.courses}
             keyExtractor={(c) => String(c.id)}
             renderItem={({ item }) => <CourseCard course={item} onContinue={openCourse} />}
-            contentContainerStyle={styles.list}
+            contentContainerStyle={[styles.list, { paddingBottom: spacing.lg + insets.bottom }]}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={refresh} />}
           />
         </>

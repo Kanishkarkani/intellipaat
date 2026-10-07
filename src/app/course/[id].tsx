@@ -1,5 +1,6 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Banner } from '@/components/Banner';
 import { OfflineBanner } from '@/components/OfflineBanner';
@@ -13,6 +14,7 @@ import { useCourseDetailViewModel } from '@/features/courses/useCourseDetailView
 
 export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const insets = useSafeAreaInsets();
   const { state, pendingSyncCount, actionError, markCompleted, retry } =
     useCourseDetailViewModel(Number(id));
 
@@ -41,6 +43,7 @@ export default function CourseDetailScreen() {
       <FlatList
         data={lessons}
         keyExtractor={(l) => l.id}
+        contentContainerStyle={{ paddingBottom: spacing.lg + insets.bottom }}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>{course.title}</Text>

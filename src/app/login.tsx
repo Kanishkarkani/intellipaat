@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -19,13 +20,29 @@ import { useLoginViewModel } from '@/features/auth/useLoginViewModel';
 export default function LoginScreen() {
   const vm = useLoginViewModel();
   const passwordRef = useRef<TextInput>(null);
+  const scrollRef = useRef<ScrollView>(null);
+
+  // Once the keyboard is up, scroll so the fields and the Log in button sit just above it.
+  useEffect(() => {
+    const sub = Keyboard.addListener('keyboardDidShow', () => {
+      scrollRef.current?.scrollToEnd({ animated: true });
+    });
+    return () => sub.remove();
+  }, []);
 
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
         style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+        // Android is edge-to-edge, so the window no longer resizes for the keyboard; pad on both platforms.
+        behavior="padding"
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : spacing.lg}>
+        <ScrollView
+          ref={scrollRef}
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}>
           <Image
             source={require('@/assets/images/logo.png')}
             style={styles.logo}
@@ -99,19 +116,25 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
-  container: { flexGrow: 1, justifyContent: 'center', padding: spacing.xl, gap: spacing.lg },
-  logo: { width: 140, height: 140, alignSelf: 'center' },
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.xl,
+    gap: spacing.lg,
+  },
+  logo: { width: 112, height: 112, alignSelf: 'center' },
   heading: { fontSize: 28, fontWeight: '700', color: colors.text },
   subheading: { fontSize: 16, color: colors.textMuted, marginBottom: spacing.sm },
   field: { gap: spacing.xs },
-  label: { fontSize: 14, fontWeight: '500', color: colors.text },
+  label: { fontSize: 15, fontWeight: '600', color: colors.text },
   input: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: colors.border,
+    minHeight: 52,
+    borderWidth: 1.5,
+    borderColor: colors.inputBorder,
     borderRadius: 10,
     paddingHorizontal: spacing.md,
-    fontSize: 16,
+    fontSize: 17,
     color: colors.text,
     backgroundColor: colors.surface,
   },
