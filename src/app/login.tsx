@@ -88,9 +88,8 @@ export default function LoginScreen() {
 
           <Button title="Log in" onPress={vm.submit} loading={vm.isSubmitting} />
 
-          {__DEV__ && (
-            <Text style={styles.hint}>Demo: any valid email, password “{DEMO_PASSWORD}”</Text>
-          )}
+          {/* Login is mocked; reviewers installing the APK need the demo credentials. */}
+          <Text style={styles.hint}>Demo: any valid email, password “{DEMO_PASSWORD}”</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
